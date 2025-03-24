@@ -7,7 +7,23 @@ A **modern, full-featured online bookstore** built using the **MERN stack**. Thi
 Users can **browse books, add them to the cart, and place orders**, while **admins** can **manage inventory and orders**.
 
 ---
+---
 
+## 📷 Screenshots  
+
+| Navbar | Footer |
+|---------|--------|
+| ![Screenshot 2025-03-24 193823](https://github.com/user-attachments/assets/05afa8e8-25da-4b54-b9df-d9e75df3bf39) | ![Screenshot 2025-03-24 193650](https://github.com/user-attachments/assets/642c09f0-980f-48c3-b4b6-745c5a46dfcb) | 
+
+| Home Page | Book Details |  
+|-----------|-------------|
+| ![Screenshot 2025-03-24 190154](https://github.com/user-attachments/assets/fa157a1a-8803-4aef-93f2-099b41525c0e) | ![Screenshot 2025-03-24 193444](https://github.com/user-attachments/assets/4d55e1b4-50aa-4e80-b045-1e1a5debeb42) |  
+
+| Cart Page | Checkout | Orders Page | 
+|-----------|-------------|----------|
+| ![Screenshot 2025-03-24 194314](https://github.com/user-attachments/assets/5e9d55c2-cdeb-40f2-8260-5182e4334b38) | ![Screenshot 2025-03-24 194535](https://github.com/user-attachments/assets/9025dafd-faf2-4c34-890e-8a50cef63229) | ![Screenshot 2025-03-24 202217](https://github.com/user-attachments/assets/cd461734-e41f-4aba-9b39-0e5438f52fa0) |
+
+---
 ## 🚀 Features  
 
 ### 🛍️ User Features  
@@ -135,23 +151,6 @@ VITE_FIREBASE_AUTH_DOMAIN=your-firebase-auth-domain
 VITE_FIREBASE_PROJECT_ID=your-firebase-project-id  
 ```
 
----
-
-## 📷 Screenshots  
-
-| Navbar | Footer |
-|---------|--------|
-| ![Screenshot 2025-03-24 193823](https://github.com/user-attachments/assets/05afa8e8-25da-4b54-b9df-d9e75df3bf39) | ![Screenshot 2025-03-24 193650](https://github.com/user-attachments/assets/642c09f0-980f-48c3-b4b6-745c5a46dfcb) | 
-
-| Home Page | Book Details |  
-|-----------|-------------|
-| ![Screenshot 2025-03-24 190154](https://github.com/user-attachments/assets/fa157a1a-8803-4aef-93f2-099b41525c0e) | ![Screenshot 2025-03-24 193444](https://github.com/user-attachments/assets/4d55e1b4-50aa-4e80-b045-1e1a5debeb42) |  
-
-| Cart Page | Checkout | Orders Page | 
-|-----------|-------------|----------|
-| ![Screenshot 2025-03-24 194314](https://github.com/user-attachments/assets/5e9d55c2-cdeb-40f2-8260-5182e4334b38) | ![Screenshot 2025-03-24 194535](https://github.com/user-attachments/assets/9025dafd-faf2-4c34-890e-8a50cef63229) | ![Screenshot 2025-03-24 202217](https://github.com/user-attachments/assets/cd461734-e41f-4aba-9b39-0e5438f52fa0) |
-
----
 
 ## 📬 Contact  
 
