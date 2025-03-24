@@ -76,19 +76,14 @@ const Checkout = () => {
         });
       }
       createOrder(newOrder)
-
+      navigate('/orders')
+      handleClearCart()
       Swal.fire({
         title: "Order Placed Successfully",
         text: "Thank you for shopping with us!",
         icon: "success",
         timer: 2500,
-      })
-      navigate('/orders').then(() => {
-        window.location.reload()
-      })
-      
-      handleClearCart()
-      return
+      });
     } catch (error) {
       console.error("Failed to create order", error)
     }
