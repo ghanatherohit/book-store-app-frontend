@@ -21,13 +21,13 @@ const Checkout = () => {
   }
   const totalPrice = cartItems.reduce((acc, item) => acc + item.newPrice, 0).toFixed(2);
   const { currentUser } = useAuth();
-  {/* react-hook-form library to handle form validation and submission. The form will have the following fields:*/ }
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm();
+
   window.addEventListener('keyup', (e) => {
     if (e.key === 'Enter') {
       e.preventDefault()
