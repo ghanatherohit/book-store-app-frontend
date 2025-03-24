@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --primary: #6366f1;
+    --primary-light: #818cf8;
+    --secondary: #10b981;
+    --text-dark: #1f2937;
+    --text-light: #f9fafb;
+    --background-light: #ffffff;
+    --background-dark: #111827;
+    --gray-light: #f3f4f6;
+    --gray-medium: #d1d5db;
+    --gray-dark: #4b5563;
+    --shadow: rgba(0, 0, 0, 0.1);
+}
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    scroll-behavior: smooth;
+    transition: all 0.3s ease;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--text-dark);
+    background-color: var(--background-light);
+    line-height: 1.6;
+}
+
+::-webkit-scrollbar {
+    width: 0.5rem;
+    background: var(--gray-light);
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 0.5rem;
+    background-color: var(--gray-medium);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: var(--gray-dark);
+}
+
+.dark {
+    background-color: var(--background-dark);
+    color: var(--text-light) !important;
+}
+
+/* Enhancement for buttons */
+button, .btn {
+    font-weight: 500;
+    box-shadow: 0 1px 3px var(--shadow);
+}
+
+button:hover, .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px var(--shadow);
+}
+
+/* Card styling */
+.card {
+    background-color: var(--background-light);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px var(--shadow);
+    transition: transform 0.3s;
+}
+
+.dark .card {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
