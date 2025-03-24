@@ -5,7 +5,6 @@ import Login from "../components/Login";
 import Register from "../components/Register.jsx";
 import Cart from "../pages/Cart/Cart.jsx";
 import Checkout from "../pages/Cart/Checkout.jsx";
-import SingleBook from "../pages/Books/SingleBook.jsx";
 import PrivateRoute from "./PrivateRoute.jsx";
 import OrdersPage from "../pages/Orders/OrdersPage.jsx";
 import AdminRoute from "./AdminRoute.jsx";
@@ -15,6 +14,7 @@ import Dashboard from "../pages/DashBoard/Dashboard.jsx";
 import ManageBooks from "../pages/DashBoard/ManageBooks.jsx";
 import EditBook from "../pages/DashBoard/EditBook.jsx";
 import AddNewBook from "../pages/DashBoard/AddNewBook.jsx";
+import SingleBook from "../pages/Books/SingleBook.jsx";
 // import Pdf from "../components/Pdf.jsx";
 
 const router = createBrowserRouter([
@@ -52,7 +52,7 @@ const router = createBrowserRouter([
             },
             {
                 path:"/books/:id",
-                element: <SingleBook />
+                element: <SingleBook/>
             }
         ]
     },
