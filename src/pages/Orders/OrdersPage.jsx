@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useGetOrdersByUserEmailQuery } from '../../redux/features/Orders/OrdersApi'
+import { useGetOrdersByUserEmailQuery } from '../../redux/features/Orders/ordersApi'
 import { useAuth } from '../../context/AuthContext'
 import { FaBox, FaMapMarkerAlt, FaUser, FaEnvelope, FaPhone } from 'react-icons/fa'
 import { motion } from 'framer-motion'

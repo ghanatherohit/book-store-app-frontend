@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from "react-hook-form"
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { useCreateOrderMutation } from '../../redux/features/Orders/OrdersApi';
+import { useCreateOrderMutation } from '../../redux/features/Orders/ordersApi';
 import Swal from 'sweetalert2';
 import { clearCart } from '../../redux/features/Cart/cartSlice';
 
