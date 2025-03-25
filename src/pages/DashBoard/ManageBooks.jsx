@@ -10,26 +10,28 @@ const ManageBooks = () => {
     const [deleteBook] = useDeleteBookMutation();
 
     const handleDeleteBook = async (id) => {
-        try {
-            await deleteBook(id).unwrap();
-            Swal.fire({
-                title: 'Success',
-                text: 'Book deleted successfully',
-                icon: 'success',
-                confirmButtonText: 'Ok'
-            });
-            refetch();
-        } catch (error) {
-            console.error('Failed to delete book:', error.message);
-            Swal.fire({
-                title: 'Error',
-                text: 'Failed to delete book. Please try again.',
-                icon: 'error',
-                confirmButtonText: 'Ok'
-            });
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: 'This action cannot be undone!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!',
+        });
+    
+        if (result.isConfirmed) {
+            try {
+                await deleteBook(id).unwrap();
+                Swal.fire('Deleted!', 'The book has been deleted.', 'success');
+                refetch();
+            } catch (error) {
+                console.error('Failed to delete book:', error.message);
+                Swal.fire('Error', 'Failed to delete book. Please try again.', 'error');
+            }
         }
     };
-
+    
     return (
         <section className="min-h-screen bg-gray-100 p-6">
             <div className="container mx-auto">

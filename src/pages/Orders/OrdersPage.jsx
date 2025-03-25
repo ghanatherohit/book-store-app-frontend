@@ -6,9 +6,13 @@ import { motion } from 'framer-motion'
 import axios from 'axios'
 import getBaseUrl from '../../utils/baseUrl'
 import { getImgUrl } from '../../utils/getImgUrl'
+import { useNavigate } from 'react-router-dom'
 
 const OrdersPage = () => {
-    window.scrollTo(0, 0);
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+    const navigate = useNavigate()
     const { currentUser } = useAuth();
     const { data: orders = [], isError } = useGetOrdersByUserEmailQuery(currentUser?.email);
     const [books, setBooks] = useState([])
@@ -42,7 +46,7 @@ const OrdersPage = () => {
                     <div className='w-full flex flex-col items-center justify-center h-[60vh] text-gray-500'>
                         <FaBox className="text-6xl mb-4 text-secondary opacity-50" />
                         <p className="text-2xl">No orders found</p>
-                        <button className="mt-6 bg-secondary text-white px-6 py-2 rounded-lg hover:bg-opacity-90 transition-all">
+                        <button  className="mt-6 bg-secondary text-white px-6 py-2 rounded-lg hover:bg-opacity-90 transition-all" onClick={() => navigate('/')}>
                             Start Shopping
                         </button>
                     </div>

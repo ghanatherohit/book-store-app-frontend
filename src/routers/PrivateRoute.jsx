@@ -23,12 +23,7 @@ const PrivateRoute = ({ children }) => {
             />
         </div>
     }
-    if (currentUser) {
-        return children
-    }
-    return (
-        <Navigate to="/login" replace />
-    )
+    return ((currentUser)?children:<Navigate to="/login" replace />)
 }
 
 export default PrivateRoute

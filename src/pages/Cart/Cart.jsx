@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { getImgUrl } from '../../utils/getImgUrl';
@@ -6,7 +6,10 @@ import { clearCart, removeFromCart } from '../../redux/features/Cart/cartSlice';
 import Swal from 'sweetalert2';
 
 const Cart = () => {
-    window.scrollTo(0, 0)
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     const cartItems = useSelector(state => state.cart.cartItems);
     const dispatch = useDispatch()
     const navigate = useNavigate()

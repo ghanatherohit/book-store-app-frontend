@@ -22,64 +22,25 @@ const router = createBrowserRouter([
         path: "/",
         element: <App />,
         children: [
-            {
-                path: "/",
-                element: <Home />,
-            },
-            {
-                path: "/orders",
-                element: <PrivateRoute><OrdersPage /></PrivateRoute>,
-            },
-            {
-                path: "/about",
-                element: <h1>About</h1>,
-            },
-            {
-                path: "/login",
-                element: <Login />,
-            },
-            {
-                path: "/register",
-                element: <Register />,
-            },
-            {
-                path: "/cart",
-                element: <Cart />,
-            },
-            {
-                path: "/checkout",
-                element: <PrivateRoute><Checkout /></PrivateRoute>,
-            },
-            {
-                path:"/books/:id",
-                element: <SingleBook/>
-            }
+            { path: "/", element: <Home /> },
+            { path: "/about", element: <h1>About</h1> },
+            { path: "/login", element: <Login /> },
+            { path: "/register", element: <Register /> },
+            { path: "/cart", element: <Cart /> },
+            { path: "/books/:id", element: <SingleBook /> },
+            { path: "/orders", element: <PrivateRoute><OrdersPage /></PrivateRoute> },
+            { path: "/checkout", element: <PrivateRoute><Checkout /></PrivateRoute> },
         ]
     },
-    {
-        path: "/adminLogin",
-        element: <AdminLogin />,
-    },
+    { path: "/adminLogin", element: <AdminLogin /> },
     {
         path: "/dashboard",
-        element: <AdminRoute><DashboardLayout/></AdminRoute>,
+        element: <AdminRoute><DashboardLayout /></AdminRoute>,
         children: [
-            {
-                path: "",
-                element: <AdminRoute><Dashboard/></AdminRoute>,
-            },
-            {
-                path: "add-new-book",
-                element: <AdminRoute><AddNewBook/></AdminRoute>,
-            },
-            {
-                path: "edit-book/:id",
-                element: <AdminRoute><EditBook/></AdminRoute>,   
-            },
-            {
-                path: "manage-books",
-                element: <AdminRoute><ManageBooks/></AdminRoute>,
-            }
+            { path: "", element: <AdminRoute><Dashboard /></AdminRoute> },
+            { path: "add-new-book", element: <AdminRoute><AddNewBook /></AdminRoute> },
+            { path: "edit-book/:id", element: <AdminRoute><EditBook /></AdminRoute> },
+            { path: "manage-books", element: <AdminRoute><ManageBooks /></AdminRoute> }
         ]
     }
 ]);

@@ -54,7 +54,12 @@ const UpdateBook = () => {
             await refetch()
         } catch (error) {
             console.error('Failed to update book.', error)
-            alert('Failed to update book.')
+            Swal.fire({
+                title: 'Update Failed',
+                text: errorMessage,
+                icon: 'error',
+                confirmButtonText: 'Try Again',
+            });
         }
     }
 
@@ -106,6 +111,8 @@ const UpdateBook = () => {
                         <input
                             type="checkbox"
                             {...register('trending')}
+                            checked={!!watch("trending")}
+                            onChange={(e) => setValue("trending", e.target.checked)}
                             className="h-5 w-5 text-blue-600 focus:ring focus:ring-offset-2 focus:ring-blue-500"
                         />
                         <label className="ml-2 text-gray-700 font-medium">Trending</label>
@@ -113,7 +120,7 @@ const UpdateBook = () => {
                     <InputField
                         label="Old Price"
                         name="oldPrice"
-                        type="float"
+                        type="text"
                         placeholder="Old Price"
                         register={register}
                         containerClass="mb-4"
@@ -121,7 +128,7 @@ const UpdateBook = () => {
                     <InputField
                         label="New Price"
                         name="newPrice"
-                        type="float"
+                        type="text"
                         placeholder="New Price"
                         register={register}
                         containerClass="mb-4"

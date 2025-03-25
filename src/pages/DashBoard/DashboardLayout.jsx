@@ -1,5 +1,5 @@
-import React from 'react'
-import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
+import React, { useState } from 'react'
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { HiViewGridAdd } from "react-icons/hi";
 import { MdOutlineManageHistory } from "react-icons/md";
 import { IoSettingsOutline } from "react-icons/io5";
@@ -11,22 +11,24 @@ import { MdNotificationsNone } from "react-icons/md";
 import { TbLogout } from "react-icons/tb";
 import { RiEdit2Line } from "react-icons/ri";
 import { BiBookAdd } from "react-icons/bi";
+import { useLocation } from 'react-router-dom';
+
 
 const DashboardLayout = () => {
-  const par = useParams();
+
+  const location = useLocation();
+  const isActive = (path) => location.pathname === path ? "bg-white text-indigo-600" : "hover:bg-indigo-600 hover:text-white";
   const navigate = useNavigate()
-  if(par=== 'dashboard'){
-    
-  }
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate("/")
   }
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <section className="flex min-h-screen overflow-hidden bg-gray-50">
       {/* Sidebar for navigation, hidden on small screens */}
-      <aside className="hidden sm:flex sm:flex-col">
+      <aside className={`md:flex md:flex-col ${sidebarOpen ? 'flex flex-col' : 'hidden'}`}>
         {/* Logo link that redirects to the homepage */}
         <Link to="/" className="flex items-center justify-center h-20 w-20 bg-gradient-to-br from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500">
           {/* Book logo image */}
@@ -37,20 +39,20 @@ const DashboardLayout = () => {
           {/* Navigation menu */}
           <nav className="flex flex-col mx-4 my-6 space-y-4">
             {/* Dashboard link with active styles */}
-            <Link to="/dashboard" className="inline-flex items-center justify-center py-3 bg-white text-indigo-600 rounded-lg font-medium shadow transition-colors duration-200">
+            <Link to="/dashboard" className={`inline-flex items-center justify-center py-3 rounded-lg transition-colors duration-200 ${isActive('/dashboard')}`}>
               <span className="sr-only">Dashboard</span>
               {/* SVG icon representing the dashboard view */}
               <svg aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
               </svg>
-            </Link>            
+            </Link>
             {/* Link to add a new book, uses the imported HiViewGridAdd icon */}
-            <Link to="/dashboard/add-new-book" className="inline-flex items-center justify-center py-3 hover:bg-indigo-600 hover:text-white rounded-lg transition-colors duration-200">
+            <Link to="/dashboard/add-new-book" className={`inline-flex items-center justify-center py-3 rounded-lg transition-colors duration-200 ${isActive('/dashboard/add-new-book')}`}>
               <span className="sr-only">Add New Book</span>
               <HiViewGridAdd className="h-6 w-6" />
             </Link>
             {/* Link to manage books, uses the imported MdOutlineManageHistory icon */}
-            <Link to="/dashboard/manage-books" className="inline-flex items-center justify-center py-3 hover:bg-indigo-600 hover:text-white rounded-lg transition-colors duration-200">
+            <Link to="/dashboard/manage-books" className={`inline-flex items-center justify-center py-3 rounded-lg transition-colors duration-200 ${isActive('/dashboard/manage-books')}`}>
               <span className="sr-only">Manage Books</span>
               <MdOutlineManageHistory className="h-6 w-6" />
             </Link>
@@ -71,7 +73,7 @@ const DashboardLayout = () => {
         {/* Header section with search bar, user info, and action buttons */}
         <header className="flex items-center h-20 px-6 sm:px-10 bg-white shadow-md ">
           {/* Hamburger menu button for mobile view */}
-          <button className="block sm:hidden p-2 mr-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors duration-200">
+          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="block sm:hidden p-2 mr-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors duration-200">
             <span className="sr-only">Menu</span>
             {/* Hamburger menu icon */}
             <HiOutlineMenuAlt2 className="h-6 w-6" />

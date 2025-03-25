@@ -14,6 +14,7 @@ const SingleBook = () => {
     const dispatch = useDispatch();
 
     const handleAddToCart = (product) => {
+        if (!product) return;
         dispatch(addToCart(product))
     }
     window.scrollTo(0, 0);
@@ -28,7 +29,7 @@ const SingleBook = () => {
             <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <p className="mt-4 text-xl">Error fetching orders. Please try again later.</p>
+            <p className="mt-4 text-xl">Error fetching book details. Please try again later.</p>
         </div>
     )
     return (
@@ -47,7 +48,7 @@ const SingleBook = () => {
                     <div className='mb-5'>
                         <p className="text-gray-700 mb-2"><strong>Author:</strong> {book.author || 'admin'}</p>
                         <p className="text-gray-700 mb-4">
-                            <strong>Published:</strong> {new Date(book?.createdAt).toLocaleDateString()}
+                            <strong>Published:</strong> {book?.createdAt ? new Date(book.createdAt).toLocaleDateString() : "Unknown"}
                         </p>
                         <p className="text-gray-700 mb-4 capitalize">
                             <strong>Category:</strong> {book?.category}

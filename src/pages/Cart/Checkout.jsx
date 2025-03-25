@@ -1,19 +1,21 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from "react-hook-form"
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useCreateOrderMutation } from '../../redux/features/Orders/ordersApi';
 import Swal from 'sweetalert2';
 import { clearCart } from '../../redux/features/Cart/cartSlice';
 
 const Checkout = () => {
-  
-  window.scrollTo(0, 0)
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const navigate = useNavigate()
   const cartItems = useSelector(state => state.cart.cartItems);
-  if (!cartItems ){
-    navigate('/')
+  if (!cartItems.length) {
+    return <Navigate to="/" replace />;
   }
   const dispatch = useDispatch()
   const handleClearCart = () => {
@@ -36,7 +38,7 @@ const Checkout = () => {
   const [createOrder, { isLoading, error }] = useCreateOrderMutation();
 
   const [isChecked, setIsChecked] = useState(false)
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data)
     const newOrder = {
       name: data.name,
@@ -75,7 +77,7 @@ const Checkout = () => {
           footer: '<a href="/">Continue Shopping</a>'
         });
       }
-      createOrder(newOrder)
+      await createOrder(newOrder).unwrap()
       navigate('/orders')
       handleClearCart()
       Swal.fire({
@@ -86,6 +88,11 @@ const Checkout = () => {
       });
     } catch (error) {
       console.error("Failed to create order", error)
+      Swal.fire({
+        title: "Order Failed",
+        text: error.message || "Something went wrong",
+        icon: "error",
+      }); 
     }
   }
 
@@ -134,7 +141,7 @@ const Checkout = () => {
                 <h2 className="font-bold text-2xl text-gray-800">Complete Your Order</h2>
                 <span className="bg-blue-600 text-white text-sm px-3 py-1 rounded-full">Cash On Delivery</span>
               </div>
-              
+
               <div className="border-t border-gray-100 pt-4 pb-2">
                 <div className="flex justify-between items-center mb-2">
                   <p className="text-gray-600">Items</p>
@@ -153,7 +160,7 @@ const Checkout = () => {
                 <h3 className="text-xl font-medium">Enter Shipping Details</h3>
                 <p className="opacity-90">Please complete all required fields</p>
               </div>
-              
+
               <form onSubmit={handleSubmit(onSubmit)} className="p-8">
                 <div className="grid gap-6 grid-cols-1 lg:grid-cols-2">
                   {/* Personal Info Section */}
@@ -162,7 +169,7 @@ const Checkout = () => {
                       <span className="bg-blue-100 text-blue-600 w-6 h-6 rounded-full inline-flex items-center justify-center mr-2">1</span>
                       Personal Information
                     </h4>
-                    
+
                     <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
                       {/* Full name field */}
                       <div>
@@ -173,7 +180,7 @@ const Checkout = () => {
                           name="name"
                           id="name"
                           className="w-full px-4 py-2.5 rounded-lg border focus:ring focus:ring-blue-200 focus:border-blue-500 transition-all"
-                          required 
+                          required
                         />
                         {errors.name && <span className="text-red-500 text-sm mt-1">This field is required</span>}
                       </div>
@@ -192,7 +199,7 @@ const Checkout = () => {
                         />
                         {errors.phone && <span className="text-red-500 text-sm mt-1">This field is required</span>}
                       </div>
-                      
+
                       {/* Email field */}
                       <div className="md:col-span-2">
                         <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
@@ -207,14 +214,14 @@ const Checkout = () => {
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Address Section */}
                   <div className="lg:col-span-2 pt-4">
                     <h4 className="font-medium text-gray-800 mb-4 flex items-center">
                       <span className="bg-blue-100 text-blue-600 w-6 h-6 rounded-full inline-flex items-center justify-center mr-2">2</span>
                       Shipping Address
                     </h4>
-                    
+
                     <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
                       {/* Address field */}
                       <div className="md:col-span-2">
@@ -225,7 +232,7 @@ const Checkout = () => {
                           name="address"
                           id="address"
                           className="w-full px-4 py-2.5 rounded-lg border focus:ring focus:ring-blue-200 focus:border-blue-500 transition-all"
-                          required 
+                          required
                         />
                         {errors.address && <span className="text-red-500 text-sm mt-1">This field is required</span>}
                       </div>
@@ -239,7 +246,7 @@ const Checkout = () => {
                           name="city"
                           id="city"
                           className="w-full px-4 py-2.5 rounded-lg border focus:ring focus:ring-blue-200 focus:border-blue-500 transition-all"
-                          required 
+                          required
                         />
                         {errors.city && <span className="text-red-500 text-sm mt-1">This field is required</span>}
                       </div>
@@ -253,7 +260,7 @@ const Checkout = () => {
                           name="state"
                           id="state"
                           className="w-full px-4 py-2.5 rounded-lg border focus:ring focus:ring-blue-200 focus:border-blue-500 transition-all"
-                          required 
+                          required
                         />
                         {errors.state && <span className="text-red-500 text-sm mt-1">This field is required</span>}
                       </div>
@@ -267,7 +274,7 @@ const Checkout = () => {
                           name="country"
                           id="country"
                           className="w-full px-4 py-2.5 rounded-lg border focus:ring focus:ring-blue-200 focus:border-blue-500 transition-all"
-                          required 
+                          required
                         />
                         {errors.country && <span className="text-red-500 text-sm mt-1">This field is required</span>}
                       </div>
@@ -281,26 +288,26 @@ const Checkout = () => {
                           name="zipcode"
                           id="zipcode"
                           className="w-full px-4 py-2.5 rounded-lg border focus:ring focus:ring-blue-200 focus:border-blue-500 transition-all"
-                          required 
+                          required
                         />
                         {errors.zipcode && <span className="text-red-500 text-sm mt-1">This field is required</span>}
                       </div>
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Terms checkbox */}
                 <div className="mt-8 pt-4 border-t">
                   <div className="flex items-start">
                     <input
                       onChange={(e) => setIsChecked(e.target.checked)}
-                      type="checkbox" 
-                      name="billing_same" 
-                      id="billing_same" 
-                      className="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500" 
+                      type="checkbox"
+                      name="billing_same"
+                      id="billing_same"
+                      className="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500"
                     />
                     <label htmlFor="billing_same" className="ml-2 block text-sm text-gray-700">
-                      I have read and agree to the 
+                      I have read and agree to the
                       <Link to="/terms" className="text-blue-600 hover:text-blue-800 underline ml-1 mr-1">Terms & Conditions</Link>
                       and
                       <Link to="/policy" className="text-blue-600 hover:text-blue-800 underline ml-1">Shopping Policy</Link>.
@@ -313,20 +320,17 @@ const Checkout = () => {
 
                 {/* Submit button */}
                 <div className="mt-6 flex justify-between items-center">
-                  <button
+                  <p
                     type="button"
                     onClick={() => navigate('/cart')}
                     className="text-gray-600 font-medium flex items-center"
                   > ← Return to cart
-                  </button>
-                  
+                  </p>
+
                   <button
                     disabled={!isChecked}
                     type="submit"
-                    className={`px-6 py-3 rounded-lg text-white font-medium flex items-center
-                      ${isChecked 
-                        ? "bg-blue-600 hover:bg-blue-700 transform hover:scale-105 transition-all shadow-md" 
-                        : "bg-blue-300 cursor-not-allowed"}`}
+                    className={`px-6 py-3 rounded-lg text-white font-medium flex items-center ${isChecked ? "bg-blue-600 hover:bg-blue-700 transform hover:scale-105 transition-all shadow-md" : "bg-blue-300 cursor-not-allowed"}`}
                   >
                     Place Order
                   </button>

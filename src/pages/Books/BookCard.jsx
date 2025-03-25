@@ -12,8 +12,8 @@ const BookCard = ({ book }) => {
 
   return (
     <div className="rounded-lg duration-300 transition-all">
-      <div className=" flex flex-col sm:flex-row sm:items-center s</div>m:h-72  justify-center gap-4">
-        <div className="sm:h-72 sm:flex-shrink-0 border rounded-md</div>">
+      <div className=" flex flex-col sm:flex-row sm:items-center sm:h-72  justify-center gap-4">
+        <div className="sm:h-72 sm:flex-shrink-0 border rounded-md">
           <Link  to={`/books/${book._id}`}> 
             <img
               src={`${getImgUrl(book?.coverImage)}`}
