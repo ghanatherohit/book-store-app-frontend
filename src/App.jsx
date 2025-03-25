@@ -6,7 +6,7 @@ import { Outlet } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import { AuthProvider } from './context/AuthContext'
-
+import { Analytics } from "@vercel/analytics/react"
 //Outlet: Children elements in router 
 
 function App() {
@@ -14,6 +14,7 @@ function App() {
     <>
       <AuthProvider>
         <Navbar />
+        <Analytics />
         <main className='min-h-screen max-w-screen-2xl mx-auto px-5 py-6 font-primary'>
           <Outlet />
         </main>
