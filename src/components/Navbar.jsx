@@ -89,10 +89,6 @@ const Navbar = () => {
 
         {/* Right side */}
         <div className="flex items-center gap-4">
-          {/* Wishlist */}
-          <button className="hidden sm:flex items-center justify-center h-10 w-10 rounded-full hover:bg-gray-100 transition-colors">
-            <GoHeart className="size-6 text-gray-700" />
-          </button>
 
           {/* Cart */}
           <Link
