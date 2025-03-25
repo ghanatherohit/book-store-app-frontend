@@ -2,7 +2,7 @@ import React from "react";
 import bannerImg from "../../assets/structureBook.png";
 import { motion } from "framer-motion";
 
-const Banner = () => {
+const Banner = () => { 
   return (
     <div className="flex flex-col md:flex-row-reverse py-16 px-4 md:px-12 lg:px-24  justify-between items-center gap-12 transition-all duration-300">
       <div className="flex md:w-1/2 w-full justify-center items-center md:justify-end">
