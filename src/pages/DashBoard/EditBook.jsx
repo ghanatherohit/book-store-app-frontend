@@ -111,8 +111,6 @@ const UpdateBook = () => {
                         <input
                             type="checkbox"
                             {...register('trending')}
-                            checked={!!watch("trending")}
-                            onChange={(e) => setValue("trending", e.target.checked)}
                             className="h-5 w-5 text-blue-600 focus:ring focus:ring-offset-2 focus:ring-blue-500"
                         />
                         <label className="ml-2 text-gray-700 font-medium">Trending</label>
