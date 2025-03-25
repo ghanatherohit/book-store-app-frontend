@@ -3,23 +3,22 @@ import bannerImg from "../../assets/structureBook.png";
 import { motion } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
 
+// Define variants outside of the component to avoid re-definitions on each render.
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { duration: 0.8, when: "beforeChildren", staggerChildren: 0.3 },
+  },
+};
+
+const childVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { duration: 0.7 } },
+};
+
 const Banner = () => {
   const { currentUser } = useAuth();
-
-  // Container animation with stagger for children
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { duration: 0.8, when: "beforeChildren", staggerChildren: 0.3 },
-    },
-  };
-
-  // Child elements animation: slight upward motion and fade-in
-  const childVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.7 } },
-  };
 
   return (
     <motion.div
