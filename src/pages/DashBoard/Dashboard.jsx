@@ -122,7 +122,8 @@ const Dashboard = () => {
             <GiProfit className="w-8 h-8" />
           </div>
           <div>
-            <span className="block text-2xl font-bold">${data?.totalSales}</span>
+            {/* Total Sales round of to 2 decimal places */}
+            <span className="block text-2xl font-bold">{data?.totalSales.toFixed(2)}</span>
             <span className="block">Total Sales</span>
           </div>
         </div>
