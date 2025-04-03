@@ -20,7 +20,7 @@ Users can **browse books, add them to the cart, and place orders**, while **admi
 
 | Home Page | Book Details |  
 |-----------|-------------|  
-| ![Screenshot 2025-03-24 190154](https://github.com/user-attachments/assets/fa157a1a-8803-4aef-93f2-099b41525c0e) | ![Screenshot 2025-03-24 193444](https://github.com/user-attachments/assets/4d55e1b4-50aa-4e80-b045-1e1a5debeb42) |  
+| ![Screenshot 2025-03-29 231421](https://github.com/user-attachments/assets/0cf9bac2-a272-406a-a0cc-ed2ecfd50748) | ![Screenshot 2025-03-24 193444](https://github.com/user-attachments/assets/4d55e1b4-50aa-4e80-b045-1e1a5debeb42) |  
 
 ### Order Process  
 
@@ -75,7 +75,6 @@ Users can **browse books, add them to the cart, and place orders**, while **admi
 | **React Router** | Client-side navigation        |  
 | **Tailwind CSS** | Modern styling framework      |  
 | **Framer Motion** | Animations & UI interactions |  
-| **Swiper.js**  | Carousel for featured books    |  
 
 ---
 
