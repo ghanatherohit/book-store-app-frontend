@@ -1,11 +1,28 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { FcGoogle } from "react-icons/fc";
 import { useForm } from "react-hook-form"
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import axios from 'axios'
 import getBaseUrl from '../utils/baseUrl';
 import Swal from 'sweetalert2';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import DOMPurify from 'dompurify';
+
+
+const loginSchema = z.object({
+    username: z.string()
+        .min(3, { message: "Username must be at least 3 characters long" })
+        .max(20, { message: "Username must be at most 20 characters long" })
+        .regex(/^[a-zA-Z0-9_]+$/, { message: "Username can only contain letters, numbers, and underscores" })
+        .refine((val) => !/\s/.test(val), { message: "Username must not contain spaces" }),
+    password: z.string()
+        .min(8, { message: "Password must be at least 8 characters long" })
+        .max(20, { message: "Password must be at most 20 characters long" })
+        .regex(/[0-9]/, { message: "Password must contain at least one number" })
+        .refine((val) => !/\s/.test(val), { message: "Password must not contain spaces" }),
+});
+
 
 const AdminLogin = () => {
     window.scrollTo(0, 0)
@@ -13,14 +30,17 @@ const AdminLogin = () => {
     const [message, setMessage] = useState('')
     const navigate = useNavigate()
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm()
+    const [showPassword, setShowPassword] = useState(false);
+    const { register, handleSubmit, formState: { errors }, reset } = useForm({
+        resolver: zodResolver(loginSchema),
+        mode: "onBlur",
+    });
 
     const onSubmit = async (data) => {
         try {
+            // Sanitize the input data to prevent XSS attacks
+            data.username = DOMPurify.sanitize(data.username)
+            data.password = DOMPurify.sanitize(data.password)
             const response = await axios.post(`${getBaseUrl()}/api/auth/admin`, data, {
                 // This is to make sure that the backend knows that the data is in JSON format.
                 headers: {
@@ -50,11 +70,26 @@ const AdminLogin = () => {
                 icon: "success",
                 title: "Admin Login Successful"
             });
-
+            reset()
             navigate('/dashboard')
         } catch (error) {
             setMessage("Invalid username or password", error.message)
             console.error(error)
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+            Toast.fire({
+                icon: "error",
+                title: "Invalid username or password"
+            });
         }
     }
 
@@ -82,6 +117,7 @@ const AdminLogin = () => {
                             placeholder='Enter your username'
                             className='w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:border-primary transition-all duration-200 focus:outline-none'
                         />
+                        {errors.username && <p className='text-red-500 text-sm'>{errors.username.message}</p>} 
                     </div>
 
                     <div className="relative">
@@ -91,25 +127,19 @@ const AdminLogin = () => {
                         <input
                             autoComplete="current-password"
                             {...register("password", { required: true })}
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             id="password"
                             placeholder='Enter your password'
                             className='w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:border-primary pr-10 transition-all duration-200 focus:outline-none'
                         />
-                        <p
-                            type=""
+                        <button
+                            type="button"
                             className='absolute right-3 top-[45px] text-gray-600 cursor-pointer transition-all duration-200 hover:scale-110'
-                            onClick={() => {
-                                const password = document.getElementById('password')
-                                if (password.type === 'password') {
-                                    password.type = 'text'
-                                } else {
-                                    password.type = 'password'
-                                }
-                            }}
+                            onClick={() => setShowPassword(!showPassword)}
                         >
-                            <FaEyeSlash />
-                        </p>
+                            {showPassword ? <FaEye /> : <FaEyeSlash />}
+                        </button>
+                        {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
                     </div>
 
                     <div className="flex justify-end">

@@ -5,23 +5,43 @@ import { useForm } from "react-hook-form"
 import { FaEyeSlash, FaEye } from "react-icons/fa";
 import { useAuth } from '../context/AuthContext';
 import Swal from 'sweetalert2';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
+const loginSchema = z.object({
+    email: z.string()
+        .email({ message: "Invalid email address" })
+        .min(5, { message: "Email is too short" })
+        .max(50, { message: "Email is too long" }),
+    password: z.string()
+        .min(8, { message: "Password must be at least 8 characters long" })
+        .max(20, { message: "Password must be at most 20 characters long" })
+        .regex(/[a-zA-Z]/, { message: "Password must contain at least one letter" })
+        .regex(/[0-9]/, { message: "Password must contain at least one number" })
+        .refine((val) => !/\s/.test(val), { message: "Password must not contain spaces" }),
+});
+
+  
+  
 const Login = () => {
     window.scrollTo(0, 0)
 
     const [message, setMessage] = useState('')
     const { loginUser, signInWithGoogle } = useAuth()
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate()
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm()
+    // Form validation using react-hook-form and zod from preventing xss attacks and sql injection
+    // zod is a schema validation library that helps to validate the data before sending it to the server
+    const { register, handleSubmit, formState: { errors },reset} = useForm({
+        resolver: zodResolver(loginSchema),
+        mode: "onBlur",
+    });
 
     const onSubmit = async (data) => {
         try {
-            await loginUser(data.email, data.password);
+            await loginUser(data.email.trim().toLowerCase(), data.password)
+            reset()
             const Toast = Swal.mixin({
                 toast: true,
                 position: "top-end",
@@ -36,7 +56,7 @@ const Login = () => {
 
             navigate("/")
         } catch (error) {
-            setMessage("Please provide a valid email and password")
+            setMessage("Invalid login credentials. Please try again.");
             console.error(error)
         }
     }
@@ -79,13 +99,14 @@ const Login = () => {
                             Email Address
                         </label>
                         <input
-                            autoComplete="current-email"
+                            autoComplete="email"
                             {...register("email", { required: true })}
                             type="email"
                             id="email"
                             placeholder='Enter your email'
                             className='w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:border-primary transition-all duration-200 focus:outline-none'
                         />
+                        {errors.email && <p className='text-red-500 text-sm mt-1'>{errors.email.message}</p>}
                     </div>
 
                     <div className="relative">
@@ -95,25 +116,19 @@ const Login = () => {
                         <input
                             autoComplete="current-password"
                             {...register("password", { required: true })}
-                            type="password"
+                            type={showPassword ? "text" : "password"}
                             id="password"
                             placeholder='Enter your password'
                             className='w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:border-primary pr-10 transition-all duration-200 focus:outline-none'
                         />
-                        <p
-                            type=""
+                        <button
+                            type="button"
                             className='absolute right-3 top-[45px] text-gray-600 cursor-pointer transition-all duration-200 hover:scale-110'
-                            onClick={() => {
-                                const password = document.getElementById('password')
-                                if (password.type === 'password') {
-                                    password.type = 'text'
-                                } else {
-                                    password.type = 'password'
-                                }
-                            }}
+                            onClick={() => setShowPassword(!showPassword)}
                         >
-                            <FaEyeSlash />
-                        </p>
+                            {showPassword ? <FaEye /> : <FaEyeSlash />}
+                        </button>
+                        {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
                     </div>
 
                     <div className="flex justify-end">
