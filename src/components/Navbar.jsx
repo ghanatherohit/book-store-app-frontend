@@ -66,15 +66,15 @@ const Navbar = () => {
     >
       <nav className="flex justify-between items-center">
         {/* Left side */}
-        <div className="flex items-center md:gap-10 gap-4">
+        <div className="flex items-center md:gap-9 gap-4 mr-2">
           {/* Logo/Menu icon */}
-          <Link to="/" className="flex items-center gap-2 transition-transform">
+          <Link to="/" className="flex items-center gap-3 transition-transform">
             <HiMiniBars3CenterLeft className="size-6 text-primary hover:scale-105 opacity-90" />
-            <span className="text-xl font-semibold hidden sm:block text-gray-800">BookStore</span>
+            <span className="text-2xl font-semibold hidden sm:block text-gray-800">BookStore</span>
           </Link>
 
           {/* Search bar */}
-          <div className="relative sm:w-72 w-40">
+          <div className="relative sm:w-72 w-auto">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <IoMdSearch className="size-5 text-gray-400" />
             </div>
@@ -89,7 +89,7 @@ const Navbar = () => {
         </div>
 
         {/* Right side */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 md:gap-6">
           {/* Cart */}
           <Link
             to="/cart"
@@ -156,8 +156,9 @@ const Navbar = () => {
               <Link
                 to="/login"
                 className="flex items-center gap-2 py-2 px-4 rounded-full bg-primary text-white hover:bg-primary/90 transition-colors"
-              >
+              > 
                 <HiOutlineUser className="size-5" />
+                <span className="block">Login</span>
               </Link>
             )}
           </div>

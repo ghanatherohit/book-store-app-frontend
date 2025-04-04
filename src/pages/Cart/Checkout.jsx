@@ -6,40 +6,86 @@ import { useAuth } from '../../context/AuthContext';
 import { useCreateOrderMutation } from '../../redux/features/Orders/ordersApi';
 import Swal from 'sweetalert2';
 import { clearCart } from '../../redux/features/Cart/cartSlice';
+import z from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod';
+
+const schema = z.object({
+  name: z.string().nonempty({ message: "Full Name is required" })
+    .regex(/^[a-zA-Z\s]+$/, { message: "Invalid name" })
+    .min(2, { message: "Name must be at least 2 characters long" })
+    .max(50, { message: "Name must be less than 50 characters" }),
+  phone: z.string().nonempty({ message: "Phone Number is required" })
+    .regex(/^\+?[0-9\s\-()]+$/, { message: "Invalid phone number" })
+    .min(10, { message: "Phone number must be at least 10 digits long" })
+    .max(15, { message: "Phone number must be less than 10 digits" })
+    .transform((val) => val.replace(/\D/g, '')),
+  address: z.string().nonempty({ message: "Street Address is required" })
+    .regex(/^[a-zA-Z0-9\s//,.'-]+$/, { message: "Invalid address" })
+    .min(5, { message: "Address must be at least 5 characters long" })
+    .max(100, { message: "Address must be less than 100 characters" }),
+  city: z.string().nonempty({ message: "City is required" })
+    .regex(/^[a-zA-Z\s]+$/, { message: "Invalid city name" })
+    .min(2, { message: "City must be at least 2 characters long" })
+    .max(50, { message: "City must be less than 50 characters" }),
+  state: z.string().nonempty({ message: "State/Province is required" })
+    .regex(/^[a-zA-Z\s]+$/, { message: "Invalid state name" })
+    .min(2, { message: "State must be at least 2 characters long" })
+    .max(50, { message: "State must be less than 50 characters" }),
+  country: z.string().nonempty({ message: "Country is required" })
+    .regex(/^[a-zA-Z\s]+$/, { message: "Invalid country name" })
+    .min(2, { message: "Country must be at least 2 characters long" })
+    .max(50, { message: "Country must be less than 50 characters" }),
+  zipcode: z.string().nonempty({ message: "Zipcode is required" })
+    .regex(/^\d+$/, { message: "Invalid Zipcode" })
+    .length(6, { message: "Zipcode must be 6 digits" })
+});
 
 const Checkout = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const cartItems = useSelector(state => state.cart.cartItems);
+
   if (!cartItems.length) {
     return <Navigate to="/" replace />;
   }
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const handleClearCart = () => {
-    dispatch(clearCart())
+    dispatch(clearCart());
   }
   const totalPrice = cartItems.reduce((acc, item) => acc + item.newPrice, 0).toFixed(2);
   const { currentUser } = useAuth();
+
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    resolver: zodResolver(schema)
+  });
 
-  window.addEventListener('keyup', (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault()
-    }
-  })
   const [createOrder, { isLoading, error }] = useCreateOrderMutation();
 
-  const [isChecked, setIsChecked] = useState(false)
+  const [isChecked, setIsChecked] = useState(false);
+
   const onSubmit = async (data) => {
-    console.log(data)
+    if (!isChecked) {
+      Swal.fire({
+        icon: "warning",
+        title: "Please agree to the terms",
+        text: "You must agree to the terms and conditions to proceed.",
+        timer: 2000,
+        timerProgressBar: true,
+        willClose: () => setIsChecked(false),
+        didOpen: () => {
+          Swal.showLoading();
+        },
+        footer: '<Link>Read Terms & Conditions</Link>'
+      });
+      return;
+    }
     const newOrder = {
       name: data.name,
       email: currentUser?.email,
@@ -49,15 +95,13 @@ const Checkout = () => {
         country: data.country,
         state: data.state,
         zipCode: data.zipcode
-
       },
       phone: data.phone,
       productIds: cartItems.map(item => item?._id),
       totalPrice: totalPrice,
     }
-    // console.log(newOrder)
     try {
-      if (!newOrder) return
+      if (!newOrder) return;
       if (cartItems.length === 0) {
         Swal.fire({
           icon: "error",
@@ -65,21 +109,17 @@ const Checkout = () => {
           text: "Your cart is empty!",
           timer: 2000,
           timerProgressBar: true,
-          //when a user clicks ok, they will be redirected to the homepage
           willClose: () => navigate('/'),
           didOpen: () => {
             Swal.showLoading();
-            const timer = Swal.getPopup().querySelector("b");
-            timerInterval = setInterval(() => {
-              timer.textContent = `${Swal.getTimerLeft()}`;
-            }, 1000);
           },
           footer: '<a href="/">Continue Shopping</a>'
         });
+        return;
       }
-      await createOrder(newOrder).unwrap()
-      navigate('/orders')
-      handleClearCart()
+      await createOrder(newOrder).unwrap();
+      navigate('/orders');
+      handleClearCart();
       Swal.fire({
         title: "Order Placed Successfully",
         text: "Thank you for shopping with us!",
@@ -87,23 +127,13 @@ const Checkout = () => {
         timer: 2500,
       });
     } catch (error) {
-      console.error("Failed to create order", error)
+      console.error("Failed to create order", error);
       Swal.fire({
         title: "Order Failed",
         text: error.message || "Something went wrong",
         icon: "error",
-      }); 
+      });
     }
-  }
-
-  {
-    const check = document.querySelector('button[type="submit"]')
-    check.addEventListener('keyup', (e) => {
-      if (e.enter) {
-        e.preventDefault()
-          .click()
-      }
-    })
   }
 
   if (isLoading) return (
@@ -130,6 +160,7 @@ const Checkout = () => {
       </div>
     </div>
   );
+
   return (
     <section className="bg-gradient-to-r from-blue-50 to-indigo-50">
       <div className="min-h-screen p-6 flex items-center justify-center">
@@ -141,7 +172,6 @@ const Checkout = () => {
                 <h2 className="font-bold text-2xl text-gray-800">Complete Your Order</h2>
                 <span className="bg-blue-600 text-white text-sm px-3 py-1 rounded-full">Cash On Delivery</span>
               </div>
-
               <div className="border-t border-gray-100 pt-4 pb-2">
                 <div className="flex justify-between items-center mb-2">
                   <p className="text-gray-600">Items</p>
@@ -175,29 +205,27 @@ const Checkout = () => {
                       <div>
                         <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
                         <input
-                          {...register("name", { required: true })}
+                          {...register("name")}
                           type="text"
                           name="name"
                           id="name"
                           className="w-full px-4 py-2.5 rounded-lg border focus:ring focus:ring-blue-200 focus:border-blue-500 transition-all"
-                          required
                         />
-                        {errors.name && <span className="text-red-500 text-sm mt-1">This field is required</span>}
+                        {errors.name && <span className="text-red-500 text-sm mt-1">{errors.name.message}</span>}
                       </div>
 
                       {/* Phone field */}
                       <div>
                         <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
                         <input
-                          {...register("phone", { required: true })}
-                          type="phone"
+                          {...register("phone")}
+                          type="text"
                           name="phone"
                           id="phone"
                           className="w-full px-4 py-2.5 rounded-lg border focus:ring focus:ring-blue-200 focus:border-blue-500 transition-all"
                           placeholder="+123 456 7890"
-                          required
                         />
-                        {errors.phone && <span className="text-red-500 text-sm mt-1">This field is required</span>}
+                        {errors.phone && <span className="text-red-500 text-sm mt-1">{errors.phone.message}</span>}
                       </div>
 
                       {/* Email field */}
@@ -212,6 +240,7 @@ const Checkout = () => {
                           defaultValue={currentUser?.email}
                         />
                       </div>
+
                     </div>
                   </div>
 
@@ -227,70 +256,61 @@ const Checkout = () => {
                       <div className="md:col-span-2">
                         <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">Street Address</label>
                         <input
-                          {...register("address", { required: true })}
+                          {...register("address")}
                           type="text"
                           name="address"
                           id="address"
                           className="w-full px-4 py-2.5 rounded-lg border focus:ring focus:ring-blue-200 focus:border-blue-500 transition-all"
-                          required
                         />
-                        {errors.address && <span className="text-red-500 text-sm mt-1">This field is required</span>}
+                        {errors.address && <span className="text-red-500 text-sm mt-1">{errors.address.message}</span>}
                       </div>
-
                       {/* City field */}
                       <div>
                         <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">City</label>
                         <input
-                          {...register("city", { required: true })}
+                          {...register("city")}
                           type="text"
                           name="city"
                           id="city"
                           className="w-full px-4 py-2.5 rounded-lg border focus:ring focus:ring-blue-200 focus:border-blue-500 transition-all"
-                          required
                         />
-                        {errors.city && <span className="text-red-500 text-sm mt-1">This field is required</span>}
+                        {errors.city && <span className="text-red-500 text-sm mt-1">{errors.city.message}</span>}
                       </div>
-
                       {/* State field */}
                       <div>
                         <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-1">State / Province</label>
                         <input
-                          {...register("state", { required: true })}
+                          {...register("state")}
                           type="text"
                           name="state"
                           id="state"
                           className="w-full px-4 py-2.5 rounded-lg border focus:ring focus:ring-blue-200 focus:border-blue-500 transition-all"
-                          required
                         />
-                        {errors.state && <span className="text-red-500 text-sm mt-1">This field is required</span>}
+                        {errors.state && <span className="text-red-500 text-sm mt-1">{errors.state.message}</span>}
                       </div>
-
                       {/* Country field */}
                       <div>
                         <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-1">Country</label>
                         <input
-                          {...register("country", { required: true })}
+                          {...register("country")}
                           type="text"
                           name="country"
                           id="country"
                           className="w-full px-4 py-2.5 rounded-lg border focus:ring focus:ring-blue-200 focus:border-blue-500 transition-all"
-                          required
                         />
-                        {errors.country && <span className="text-red-500 text-sm mt-1">This field is required</span>}
+                        {errors.country && <span className="text-red-500 text-sm mt-1">{errors.country.message}</span>}
                       </div>
-
                       {/* Zipcode field */}
                       <div>
                         <label htmlFor="zipcode" className="block text-sm font-medium text-gray-700 mb-1">Zipcode</label>
                         <input
-                          {...register("zipcode", { required: true })}
+                          {...register("zipcode")}
                           type="text"
                           name="zipcode"
                           id="zipcode"
                           className="w-full px-4 py-2.5 rounded-lg border focus:ring focus:ring-blue-200 focus:border-blue-500 transition-all"
-                          required
                         />
-                        {errors.zipcode && <span className="text-red-500 text-sm mt-1">This field is required</span>}
+                        {errors.zipcode && <span className="text-red-500 text-sm mt-1">{errors.zipcode.message}</span>}
                       </div>
                     </div>
                   </div>
@@ -324,9 +344,9 @@ const Checkout = () => {
                     type="button"
                     onClick={() => navigate('/cart')}
                     className="text-gray-600 font-medium flex items-center"
-                  > ← Return to cart
+                  >
+                    ← Return to cart
                   </p>
-
                   <button
                     disabled={!isChecked}
                     type="submit"
@@ -344,4 +364,4 @@ const Checkout = () => {
   );
 };
 
-export default Checkout
+export default Checkout;

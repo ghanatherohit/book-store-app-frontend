@@ -29,7 +29,7 @@ const Banner = () => {
     >
       <motion.div
         variants={childVariants}
-        className="w-full lg:w-1/2 flex justify-center items-center"
+        className="w-full lg:w-1/2 flex justify-center items-center text-transparent"
       >
         <img
           src={bannerImg}
@@ -41,8 +41,8 @@ const Banner = () => {
         variants={childVariants}
         className="w-full lg:w-1/2 text-gray-900 space-y-6"
       >
-        <h1 className="md:text-5xl text-2xl font-bold mb-7 tracking-wide">
-          Welcome to the Bookstore{currentUser ? `, ${currentUser.displayName}` : ""}
+        <h1 className="md:text-5xl text-2xl font-bold mb-7 tracking-wide decoration-transparent">
+          Welcome to the Bookstore{currentUser && currentUser.displayName ? `, ${currentUser.displayName}` : ""}
         </h1>
         <p className="text-xl text-gray-700">
           Discover a curated collection of timeless classics and modern bestsellers.

@@ -35,13 +35,59 @@ const Login = () => {
     // zod is a schema validation library that helps to validate the data before sending it to the server
     const { register, handleSubmit, formState: { errors },reset} = useForm({
         resolver: zodResolver(loginSchema),
-        mode: "onBlur",
+        mode: "all",
     });
 
     const onSubmit = async (data) => {
         try {
             await loginUser(data.email.trim().toLowerCase(), data.password)
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                //remove toast when the user clicks on anywhere on the screen
+                didOpen: (toast) => {
+                    window.addEventListener("click", () => {
+                        Toast.close(toast)
+                    })
+                },
+                onOpen: (toast) => {
+                    window.addEventListener("click", () => {
+                        Toast.close(toast)
+                    })
+                },
+            });
+            Toast.fire({
+                icon: "success",
+                title: "Login Successful"
+            });
+            setTimeout(() => {
+                setMessage("")
+            }, 3000)
+            // Redirect to home page after successful login
             reset()
+            navigate("/")
+        } catch (error) {
+            if (error.code === "auth/user-not-found") {
+                setMessage("User not found")
+            }
+            else if (error.code === "auth/wrong-password") {
+                setMessage("Wrong password")
+            }
+            else if (error.code === "auth/invalid-email") {
+                setMessage("Invalid email")
+            }
+            else if (error.code === "auth/too-many-requests") {
+                setMessage("Too many requests, please try again later")
+            }
+            else {
+                setMessage("Invalid credentials")
+            }
+            setTimeout(() => {
+                setMessage("")
+            }, 3000)
             const Toast = Swal.mixin({
                 toast: true,
                 position: "top-end",
@@ -50,14 +96,10 @@ const Login = () => {
                 timerProgressBar: true,
             });
             Toast.fire({
-                icon: "success",
-                title: "Login Successful"
+                icon: "error",
+                title: "Invalid Credentials"
             });
-
-            navigate("/")
-        } catch (error) {
-            setMessage("Invalid login credentials. Please try again.");
-            console.error(error)
+            console.error(error.code)
         }
     }
 
@@ -75,10 +117,26 @@ const Login = () => {
                 icon: "success",
                 title: "Login Successful"
             });
-
+            setTimeout(() => {
+                setMessage("")
+            }, 3000)
             navigate("/")
         } catch (error) {
             setMessage("Failed to login")
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+            });
+            Toast.fire({
+                icon: "error",
+                title: "Failed to login with Google"
+            });
+            setTimeout(() => {
+                setMessage("")
+            }, 3000)
             console.error(error)
         }
     }
@@ -132,7 +190,7 @@ const Login = () => {
                     </div>
 
                     <div className="flex justify-end">
-                        <Link to="/forgot-password" className="text-sm text-blue-600 hover:underline">
+                        <Link className="text-sm text-blue-600 hover:underline">
                             Forgot password?
                         </Link>
                     </div>

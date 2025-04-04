@@ -33,7 +33,7 @@ const AdminLogin = () => {
     const [showPassword, setShowPassword] = useState(false);
     const { register, handleSubmit, formState: { errors }, reset } = useForm({
         resolver: zodResolver(loginSchema),
-        mode: "onBlur",
+        mode: "all",
     });
 
     const onSubmit = async (data) => {
@@ -61,14 +61,21 @@ const AdminLogin = () => {
                 showConfirmButton: false,
                 timer: 3000,
                 timerProgressBar: true,
+                //remove toast when the user clicks on anywhere on the screen
                 didOpen: (toast) => {
-                    toast.onmouseenter = Swal.stopTimer;
-                    toast.onmouseleave = Swal.resumeTimer;
-                }
+                    window.addEventListener("click", () => {
+                        Toast.close(toast)
+                    })
+                },
+                onOpen: (toast) => {
+                    window.addEventListener("click", () => {
+                        Toast.close(toast)
+                    })
+                },
             });
             Toast.fire({
                 icon: "success",
-                title: "Admin Login Successful"
+                title: "Admin login successful",
             });
             reset()
             navigate('/dashboard')
@@ -81,10 +88,17 @@ const AdminLogin = () => {
                 showConfirmButton: false,
                 timer: 3000,
                 timerProgressBar: true,
+                //remove toast when the user clicks on anywhere on the screen
                 didOpen: (toast) => {
-                    toast.onmouseenter = Swal.stopTimer;
-                    toast.onmouseleave = Swal.resumeTimer;
-                }
+                    window.addEventListener("click", () => {
+                        Toast.close(toast)
+                    })
+                },
+                onOpen: (toast) => {
+                    window.addEventListener("click", () => {
+                        Toast.close(toast)
+                    })
+                },
             });
             Toast.fire({
                 icon: "error",
@@ -117,7 +131,7 @@ const AdminLogin = () => {
                             placeholder='Enter your username'
                             className='w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:border-primary transition-all duration-200 focus:outline-none'
                         />
-                        {errors.username && <p className='text-red-500 text-sm'>{errors.username.message}</p>} 
+                        {errors.username && <p className='text-red-500 text-sm'>{errors.username.message}</p>}
                     </div>
 
                     <div className="relative">

@@ -14,7 +14,7 @@ const OrdersPage = () => {
     }, []);
     const navigate = useNavigate()
     const { currentUser } = useAuth();
-    const { data: orders = [], isError } = useGetOrdersByUserEmailQuery(currentUser?.email);
+    const { data: orders = [], isError, isLoading } = useGetOrdersByUserEmailQuery(currentUser?.email);
     const [books, setBooks] = useState([])
 
     useEffect(() => {
@@ -37,7 +37,11 @@ const OrdersPage = () => {
             <p className="mt-4 text-xl">Error fetching orders. Please try again later.</p>
         </div>
     )
-
+    if(isLoading) return (
+        <div className="flex items-center justify-center h-screen text-gray-500">
+            <svg className="animate-spin h-10 w-10 border-t-4 border-secondary rounded-full" viewBox="0 0 24 24"></svg>
+        </div>
+    )
     return (
         <div className='container mx-auto p-4 transition-all max-w-5xl'>
             <h1 className='text-4xl font-bold p-2 mb-8 border-b-2 border-secondary'>My Orders</h1>
