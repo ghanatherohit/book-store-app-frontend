@@ -17,8 +17,7 @@ const schema = z.object({
   phone: z.string().nonempty({ message: "Phone Number is required" })
     .regex(/^\+?[0-9\s\-()]+$/, { message: "Invalid phone number" })
     .min(10, { message: "Phone number must be at least 10 digits long" })
-    .max(15, { message: "Phone number must be less than 10 digits" })
-    .transform((val) => val.replace(/\D/g, '')),
+    .max(10, { message: "Phone number must be less than 10 digits" }),
   address: z.string().nonempty({ message: "Street Address is required" })
     .regex(/^[a-zA-Z0-9\s//,.'-]+$/, { message: "Invalid address" })
     .min(5, { message: "Address must be at least 5 characters long" })
